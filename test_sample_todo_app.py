@@ -18,11 +18,10 @@ driver = webdriver.Remote(
 
 driver.get("http://localhost:8081/")
 
-# Use WebDriverWait to wait for the element to be visible before interacting with it
+# Increase the wait time and wait for visibility of the element
 try:
-    # Wait for the element with name "li3" to be clickable
-    li3_element = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.NAME, "li3"))
+    li3_element = WebDriverWait(driver, 20).until(
+        EC.visibility_of_element_located((By.NAME, "li3"))
     )
     li3_element.click()
     
