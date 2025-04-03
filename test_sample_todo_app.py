@@ -4,7 +4,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
-# Assuming you have set up your WebDriver already (e.g., driver = webdriver.Chrome())
+# Initialize the WebDriver (for Chrome in this case)
+driver = webdriver.Chrome()  # Make sure you have the correct WebDriver installed
 
 # Open the URL
 driver.get("http://localhost:8081/")
