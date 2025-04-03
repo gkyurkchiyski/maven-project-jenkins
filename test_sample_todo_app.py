@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
 # Initialize the WebDriver (for Chrome in this case)
-driver = webdriver.Chrome()  # Make sure you have the correct WebDriver installed
+driver = webdriver.Chrome()  # Ensure you have the correct WebDriver installed
 
 # Open the URL
 driver.get("http://localhost:8081/")
@@ -26,11 +26,18 @@ try:
     # Verify that the new item is added
     assert "No results found." not in driver.page_source
 
-    # Mark the test as passed
-    driver.execute_script("lambda-status=passed")
+    # If no exception occurs, the test is passed
+    print("Test Passed")
 
 except TimeoutException:
-    print("The element li3 was not found in time.")
-    driver.execute_script("lambda-status=failed")
+    print("The element 'li3' was not found in time.")
+    print("Test Failed")
+
+except Exception as e:
+    # Handle other exceptions
+    print(f"An error occurred: {e}")
+    print("Test Failed")
+
 finally:
+    # Close the browser
     driver.quit()
