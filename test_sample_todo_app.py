@@ -1,10 +1,15 @@
+import subprocess
+import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
-# Initialize the WebDriver (for Chrome in this case)
+# Start the HTTP server in the background
+server = subprocess.Popen(['python3', '-m', 'http.server', '8081'])
+
+# Initialize WebDriver
 driver = webdriver.Chrome()  # Ensure you have the correct WebDriver installed
 
 # Open the URL
@@ -39,5 +44,6 @@ except Exception as e:
     print("Test Failed")
 
 finally:
-    # Close the browser
+    # Close the browser and stop the HTTP server
     driver.quit()
+    server.terminate()  # Ensure the HTTP server is terminated
