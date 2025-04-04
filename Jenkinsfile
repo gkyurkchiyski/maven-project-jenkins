@@ -7,7 +7,7 @@ pipeline {
   stage('Setup') {
     steps {
       sh 'wget https://downloads.lambdatest.com/tunnel/v3/linux/64bit/LT_Linux.zip'
-      sh 'sudo apt-get install zip unzip' 
+      sh 'sudo apt-get install -y zip unzip' 
       sh 'unzip -o LT_Linux.zip'
       sh './LT --user ${LT_USERNAME} --key ${LT_ACCESS_KEY} --tunnelName jenkins-tunnel --infoAPIPort 8000 &'
     }
