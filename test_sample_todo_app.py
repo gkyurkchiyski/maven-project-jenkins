@@ -1,49 +1,28 @@
-import subprocess
-import time
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.keys import Keys
+import os
+import json
 
-# Start the HTTP server in the background
-server = subprocess.Popen(['python3', '-m', 'http.server', '8081'])
-
-# Initialize WebDriver
-driver = webdriver.Chrome()  # Ensure you have the correct WebDriver installed
-
-# Open the URL
+url = os.getenv("LT_HUB_URL")
+capabilities = {
+    "build" : os.getenv("LT_BUILD_NAME"),
+    "name" : "Quick Test",
+    "platform" : "Windows 10",
+    "browserName" : "Chrome",
+    "version" : "88.0",
+    "resolution" : "1920x1080",
+    "tunnel" : True
+}
+driver = webdriver.Remote(
+    desired_capabilities= capabilities,
+    command_executor= url
+)
 driver.get("http://localhost:8081/")
+driver.find_element_by_name("li3").click()
 
-try:
-    # Wait for the element with name 'li3' to be clickable (or present)
-    li3_element = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.NAME, "li3"))
-    )
-    # Once the element is clickable, click it
-    li3_element.click()
-
-    # Continue with your other interactions
-    textbox = driver.find_element(By.ID, "sampletodotext")
-    textbox.send_keys("Testing")
-    driver.find_element(By.ID, "addbutton").click()
-
-    # Verify that the new item is added
-    assert "No results found." not in driver.page_source
-
-    # If no exception occurs, the test is passed
-    print("Test Passed")
-
-except TimeoutException:
-    print("The element 'li3' was not found in time.")
-    print("Test Failed")
-
-except Exception as e:
-    # Handle other exceptions
-    print(f"An error occurred: {e}")
-    print("Test Failed")
-
-finally:
-    # Close the browser and stop the HTTP server
-    driver.quit()
-    server.terminate()  # Ensure the HTTP server is terminated
+textbox = driver.find_element_by_id("sampletodotext")
+textbox.send_keys("Testing")
+driver.find_element_by_id("addbutton").click()
+assert "No results found." not in driver.page_source
+driver.execute_script("lambda-status=passed")
+driver.quit()
