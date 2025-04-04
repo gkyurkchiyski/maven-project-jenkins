@@ -69,10 +69,13 @@ pipeline {
 
     post {
         always {
-            script {
-                // Cleanup: Ensure LambdaTest Tunnel is stopped
-                sh 'pkill -f "LT" || true'
-                // Optionally, perform any other necessary cleanup steps
+            // Ensure cleanup is executed within the node context
+            node {
+                script {
+                    // Cleanup: Ensure LambdaTest Tunnel is stopped
+                    sh 'pkill -f "LT" || true'
+                    // Optionally, perform any other necessary cleanup steps
+                }
             }
         }
     }
